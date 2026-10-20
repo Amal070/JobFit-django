@@ -1,114 +1,191 @@
-﻿# AI Resume Analyzer
+# JobFit — Precision AI Resume Analyzer & ATS Optimization Platform
 
-## Project Overview
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Django-5.0%2B-green.svg)](https://www.djangoproject.com/)
+[![React Router](https://img.shields.io/badge/React_Router-v7-red.svg)](https://reactrouter.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC.svg)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 
-AI Resume Analyzer is a full-stack resume review application built with a Django REST backend and a React frontend. Users can upload PDF resumes, register/login with JWT authentication, and analyze resumes against job descriptions using a generative AI service.
+JobFit is a modern full-stack career platform designed to help job seekers bypass Applicant Tracking System (ATS) screeners. Built with a **Django REST Framework** backend and a **React 19 + React Router 7** frontend, JobFit parses PDF resumes, matches them against specific job listings, and leverages ultra-fast **Groq AI inference** to generate actionable scores, keyword recommendations, and formatting feedback.
 
-The current implementation uses Django, Django REST Framework, and Groq's generative AI API to score resumes and provide structured ATS feedback.
+---
 
-## Features
+## Highlights & Features
 
-- 🚀 **AI Resume Scoring**: Analyze resume content against job descriptions using a Groq AI model
-- 📄 **PDF Resume Processing**: Extract text from uploaded PDF resumes with PyMuPDF
-- 🔐 **JWT Authentication**: User registration and login powered by Django REST Framework Simple JWT
-- 💾 **Resume Storage**: Upload, list, view, and delete resumes via Django REST API
-- 📊 **Detailed Feedback**: AI returns structured scores and tips for ATS, content, structure, skills, and tone/style
-- 🎨 **Responsive UI**: React frontend styled with TailwindCSS and modern client-side routing
-- ⚡ **Developer Workflow**: Local frontend development with Vite and React Router dev server
+- 🎯 **ATS Compatibility Scoring**: Generates an overall ATS readiness score (0–100) alongside qualitative screener feedback.
+- 🔍 **Deep Category Breakdown**:
+  - **Tone & Style**: Evaluates phrasing, formality, and active voice.
+  - **Content & Impact**: Reviews quantifiable metrics and achievements.
+  - **Structure & Layout**: Audits section headers, chronological flow, and scannability.
+  - **Skills & Keywords**: Detects critical role requirements and flags keyword gaps.
+- 🌓 **Monochrome Design with Dark & Light Modes**: Minimalist aesthetic (inspired by Linear and Vercel) with instant theme switching (Dark, Light, System) and zero flash of unstyled content.
+- 📄 **Interactive PDF Document Viewer**: Side-by-side desktop view and mobile tab switcher for inspecting resume formatting alongside feedback.
+- ⚡ **Resilient AI Pipeline**: Dynamic model selection (`openai/gpt-oss-120b`, `qwen/qwen3.8-27b`) with automatic fallback and robust JSON response extraction.
+- 🔐 **JWT Session Authentication**: User registration, login, and token refresh isolating all resume data to the authenticated user.
+- 📱 **Mobile-First Responsive UI**: Fully tested and responsive across all viewports (320px mobile to 1440px desktop).
+
+---
 
 ## Tech Stack
 
-- **Frontend**: React 19, React Router 7, TypeScript, TailwindCSS, Zustand
-- **Backend**: Django, Django REST Framework, Simple JWT, django-cors-headers
-- **AI Integration**: Groq generative AI via `groq` Python package
-- **PDF Parsing**: PyMuPDF (`fitz`) for extracting resume text from PDFs
-- **Storage**: SQLite for local development, Django media storage for uploaded resumes
-- **Deployment**: Frontend Dockerfile included for containerized builds
+| Domain | Technologies |
+| :--- | :--- |
+| **Frontend** | React 19, React Router 7 (SPA Mode), TypeScript, Vite, Tailwind CSS v4, react-dropzone |
+| **Backend** | Django, Django REST Framework, Simple JWT, django-cors-headers, python-dotenv |
+| **AI Inference** | Groq Python SDK (`openai/gpt-oss-120b`, `qwen/qwen3.8-27b`) |
+| **PDF Extraction**| PyMuPDF (`pymupdf` / `fitz`) |
+| **Database** | SQLite (development) / PostgreSQL ready |
 
-## Core Backend APIs
+---
 
-- `POST /api/auth/register/` — register a new user
-- `POST /api/auth/login/` — obtain JWT access and refresh tokens
-- `POST /api/auth/refresh/` — refresh JWT token
-- `GET /api/auth/me/` — retrieve authenticated user details
-- `GET /api/resumes/` — list uploaded resumes
-- `POST /api/resumes/upload/` — upload a resume PDF
-- `GET /api/resumes/<id>/` — get resume metadata
-- `POST /api/resumes/<id>/analyze/` — analyze a resume with AI
-- `DELETE /api/resumes/<id>/delete/` — delete a resume
+## Project Structure
 
-## Environment Variables
-
-Create a `.env` file in `backend/` with values such as:
-
-```env
-DJANGO_SECRET_KEY=your-secret-key
-DEBUG=True
-GROQ_API_KEY=your-groq-api-key
-ANTHROPIC_API_KEY=your-anthropic-api-key
+```text
+JobFit-AI/
+├── backend/
+│   ├── accounts/             # User registration, login, JWT views & serializers
+│   ├── analysis/             # AI analysis pipeline & Groq inference service
+│   │   ├── ai_service.py     # PDF text extraction & model fallback handler
+│   │   └── views.py          # /api/resumes/<id>/analyze/ endpoint
+│   ├── core/                 # Django settings, CORS, and root URLs
+│   ├── resumes/              # Resume uploads, model storage, and file serving
+│   ├── .env.example          # Environment variables template
+│   └── manage.py
+├── frontend/
+│   ├── app/
+│   │   ├── components/       # UI components (Navbar, Footer, ScoreGauge, ATS, Details)
+│   │   ├── routes/           # Application pages (home, upload, resume, auth, wipe)
+│   │   ├── root.tsx          # Root layout & theme hydration bootstrap
+│   │   └── app.css           # Semantic monochrome tokens & base styles
+│   ├── lib/
+│   │   ├── api.ts            # Client API client with auth interceptors
+│   │   └── theme.tsx         # ThemeContext provider and toggle component
+│   └── vite.config.ts        # Vite + Tailwind + React Router config
+├── .gitignore                # Comprehensive security & artifact filter
+└── README.md
 ```
+
+---
+
+## Backend REST APIs
+
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `POST` | `/api/auth/register/` | Register a new user | No |
+| `POST` | `/api/auth/login/` | Obtain JWT access and refresh tokens | No |
+| `POST` | `/api/auth/refresh/` | Refresh expired access token | No |
+| `GET` | `/api/auth/me/` | Retrieve current authenticated user | Yes |
+| `GET` | `/api/resumes/` | List all resumes for current user | Yes |
+| `POST` | `/api/resumes/upload/` | Upload a PDF resume with target job info | Yes |
+| `GET` | `/api/resumes/<id>/` | Get resume details and stored analysis | Yes |
+| `POST` | `/api/resumes/<id>/analyze/` | Run AI analysis on uploaded resume | Yes |
+| `GET` | `/api/resumes/file/<path>/` | Securely serve uploaded resume PDF | Yes |
+| `DELETE`| `/api/resumes/<id>/delete/` | Delete resume and attached files | Yes |
+
+---
 
 ## Getting Started
 
-### Backend Setup
+### Prerequisites
 
-1. Create and activate a Python virtual environment:
+- **Python 3.10+**
+- **Node.js 18+** & **npm**
+- A free **[Groq API Key](https://console.groq.com/keys)**
+
+---
+
+### 1. Backend Setup
+
+1. **Navigate to backend and create a virtual environment:**
+   ```bash
+   cd backend
+   python -m venv venv
+   ```
+
+2. **Activate the environment:**
+   - **Windows (PowerShell):**
+     ```powershell
+     .\venv\Scripts\Activate.ps1
+     ```
+   - **macOS / Linux:**
+     ```bash
+     source venv/bin/activate
+     ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure Environment Variables:**
+   Copy `.env.example` to `.env`:
+   ```bash
+   copy .env.example .env     # Windows
+   cp .env.example .env       # macOS / Linux
+   ```
+
+   Edit `backend/.env` with your credentials:
+   ```env
+   DJANGO_SECRET_KEY=your-custom-secret-key
+   DEBUG=True
+   GROQ_API_KEY=gsk_your_groq_api_key_here
+   GROQ_MODEL=openai/gpt-oss-120b
+   ```
+
+5. **Run migrations:**
+   ```bash
+   python manage.py migrate
+   ```
+
+6. **Start the Django server:**
+   ```bash
+   python manage.py runserver
+   ```
+   *The backend will be live at `http://127.0.0.1:8000/`.*
+
+---
+
+### 2. Frontend Setup
+
+1. **Navigate to the frontend directory:**
+   ```bash
+   cd ../frontend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the local development server:**
+   ```bash
+   npm run dev
+   ```
+   *The application will be live at `http://localhost:5173/`.*
+
+---
+
+## Production Build
+
+To compile the frontend for production:
 
 ```bash
-cd backend
-python -m venv venv
-.\venv\Scripts\activate
-```
-
-2. Install backend dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Apply database migrations:
-
-```bash
-python manage.py migrate
-```
-
-4. Run the backend server:
-
-```bash
-python manage.py runserver
-```
-
-### Frontend Setup
-
-1. Install frontend dependencies:
-
-```bash
-cd ../frontend
-npm install
-```
-
-2. Start the frontend development server:
-
-```bash
-npm run dev
-```
-
-### Production Build
-
-To build the frontend for production:
-
-```bash
+cd frontend
 npm run build
 ```
 
-To serve the built frontend:
+The compiled static assets will be output to `frontend/build/client/`.
 
-```bash
-npm run start
-```
+---
 
-## Notes
+## Security & Privacy
 
-- The project no longer uses Puter. Authentication and storage are handled by Django and JWT.
-- Uploaded resumes are stored in `backend/media/` during local development.
-- The AI analysis pipeline extracts resume text from PDF files and sends it to Groq for scoring.
+- **Protected Secrets:** All environment files (`.env`, `*.env`) and private keys are ignored via `.gitignore` to prevent leaks.
+- **Isolated User Data:** Resumes and analysis reports are associated only with the user who uploaded them; unauthorized users cannot query or view another user's files.
+- **Local Storage:** Uploaded PDFs are stored in `backend/media/` during local development and excluded from version control.
+
+---
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE).
