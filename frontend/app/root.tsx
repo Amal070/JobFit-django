@@ -12,6 +12,8 @@ import "./app.css";
 import { ThemeProvider } from "~/lib/theme";
 
 export const links: Route.LinksFunction = () => [
+  { rel: "icon", type: "image/png", href: "/favicon.png" },
+  { rel: "apple-touch-icon", href: "/logo.png" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",

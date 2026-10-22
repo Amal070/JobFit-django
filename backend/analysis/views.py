@@ -15,8 +15,13 @@ def analyze_resume(request, resume_id):
     except Resume.DoesNotExist:
         return Response({"error": "Resume not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    # Return existing analysis if already done
-    if hasattr(resume, "analysis"):
+    force_reanalyze = (
+        request.data.get("force", False)
+        or request.query_params.get("force") == "true"
+    )
+
+    # Return existing analysis if already done and force re-analysis was not requested
+    if hasattr(resume, "analysis") and not force_reanalyze:
         return Response({"feedback": resume.analysis.feedback})
 
     try:
@@ -34,10 +39,15 @@ def analyze_resume(request, resume_id):
             error_msg = "Groq AI connection error. Please verify your GROQ_API_KEY in backend/.env and check your internet connection."
         return Response({"error": error_msg}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # Save analysis to DB
-    analysis = Analysis.objects.create(resume=resume, feedback=feedback)
+    # Save or update analysis in DB
+    if hasattr(resume, "analysis"):
+        analysis = resume.analysis
+        analysis.feedback = feedback
+        analysis.save()
+    else:
+        analysis = Analysis.objects.create(resume=resume, feedback=feedback)
 
-    # Also save feedback on the resume itself for easy access
+    # Also update feedback cache on the resume
     resume.feedback = feedback
     resume.save()
 

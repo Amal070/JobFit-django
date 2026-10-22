@@ -24,24 +24,24 @@ export default function Home() {
   const [loadingResumes, setLoadingResumes] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
+  const loadResumes = async () => {
+    setLoadingResumes(true);
+    setLoadError(null);
+    try {
+      const list = await listResumes();
+      setResumes(list);
+    } catch (err) {
+      setLoadError((err as Error).message);
+    } finally {
+      setLoadingResumes(false);
+    }
+  };
+
   useEffect(() => {
     const logged = isAuthenticated();
     setIsLoggedIn(logged);
 
     if (logged) {
-      const loadResumes = async () => {
-        setLoadingResumes(true);
-        setLoadError(null);
-        try {
-          const list = await listResumes();
-          setResumes(list);
-        } catch (err) {
-          setLoadError((err as Error).message);
-        } finally {
-          setLoadingResumes(false);
-        }
-      };
-
       loadResumes();
     }
   }, []);
@@ -144,8 +144,8 @@ export default function Home() {
               <div className="p-4 rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error-border)] text-sm text-[var(--color-error)] flex items-center justify-between">
                 <span>{loadError}</span>
                 <button
-                  onClick={() => window.location.reload()}
-                  className="font-semibold underline cursor-pointer text-xs"
+                  onClick={() => loadResumes()}
+                  className="font-semibold underline cursor-pointer text-xs hover:opacity-85"
                 >
                   Retry
                 </button>

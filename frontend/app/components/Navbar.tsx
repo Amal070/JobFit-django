@@ -37,9 +37,11 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand / Logo */}
         <Link to="/" className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--text-primary)] rounded-lg">
-          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] font-black text-sm tracking-wider shadow-xs">
-            JF
-          </span>
+          <img
+            src="/logo.png"
+            alt="JobFit Logo"
+            className="w-8 h-8 rounded-lg object-contain shadow-xs"
+          />
           <div className="flex flex-col">
             <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] leading-none">
               JobFit

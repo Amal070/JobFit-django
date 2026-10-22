@@ -92,20 +92,40 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     },
   };
 
-  let response = await fetch(url, mergedOptions);
+  let response: Response;
+  try {
+    response = await fetch(url, mergedOptions);
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error(
+        `Unable to reach backend server at ${API_BASE}. Please make sure the Django server is running.`
+      );
+    }
+    throw err;
+  }
+
   if (response.status === 401) {
     const newAccess = await refreshAuthToken();
     if (!newAccess) {
       throw new Error("Session expired. Please sign in again.");
     }
 
-    response = await fetch(url, {
-      ...mergedOptions,
-      headers: {
-        ...((mergedOptions.headers as Record<string, string>) || {}),
-        Authorization: `Bearer ${newAccess}`,
-      },
-    });
+    try {
+      response = await fetch(url, {
+        ...mergedOptions,
+        headers: {
+          ...((mergedOptions.headers as Record<string, string>) || {}),
+          Authorization: `Bearer ${newAccess}`,
+        },
+      });
+    } catch (err) {
+      if (err instanceof TypeError) {
+        throw new Error(
+          `Unable to reach backend server at ${API_BASE}. Please make sure the Django server is running.`
+        );
+      }
+      throw err;
+    }
   }
 
   return response;
@@ -148,11 +168,19 @@ const formatErrorResponse = async (response: Response, defaultMsg: string): Prom
 };
 
 export const signUp = async (username: string, password: string) => {
-  const response = await fetch(`${API_BASE}/auth/register/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/auth/register/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error(`Unable to reach backend server at ${API_BASE}. Please make sure the Django server is running.`);
+    }
+    throw err;
+  }
 
   if (!response.ok) {
     const msg = await formatErrorResponse(response, "Registration failed");
@@ -170,11 +198,19 @@ export const signUp = async (username: string, password: string) => {
 };
 
 export const signIn = async (username: string, password: string) => {
-  const response = await fetch(`${API_BASE}/auth/login/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/auth/login/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error(`Unable to reach backend server at ${API_BASE}. Please make sure the Django server is running.`);
+    }
+    throw err;
+  }
 
   if (!response.ok) {
     const msg = await formatErrorResponse(response, "Login failed. Check your username and password.");
@@ -252,13 +288,13 @@ export const uploadResume = async (
   };
 };
 
-export const analyzeResume = async (resumeId: string, message: string) => {
+export const analyzeResume = async (resumeId: string, message?: string, force: boolean = false) => {
   const response = await fetchWithAuth(`${API_BASE}/resumes/${resumeId}/analyze/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ message }),
+    body: JSON.stringify({ message: message || "", force }),
   });
 
   if (!response.ok) {

@@ -2,6 +2,10 @@
 
 <div align="center">
 
+<img src="./frontend/public/logo.png" alt="JobFit Logo" width="120" style="border-radius: 20px;" />
+
+<br /><br />
+
 [![Repository](https://img.shields.io/badge/GitHub-Amal070%2FJobFit--django-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Amal070/JobFit-django)
 [![Django](https://img.shields.io/badge/Backend-Django_5.1_+_DRF-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com)
 [![React](https://img.shields.io/badge/Frontend-React_19_+_React_Router_7-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)

@@ -34,6 +34,43 @@ const CategoryHeader = ({
   );
 };
 
+const renderExplanation = (explanation: string) => {
+  if (!explanation) return null;
+
+  const rewriteMatch = explanation.match(/(?:Suggested Rewrite(?:\s*\(.*?\))?:?|Rewrite:?)\s*(.+)$/is);
+  if (rewriteMatch && rewriteMatch.index !== undefined) {
+    const mainText = explanation.substring(0, rewriteMatch.index).trim();
+    const rewriteText = rewriteMatch[1].trim();
+
+    return (
+      <div className="space-y-2 mt-1">
+        {mainText && (
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+            {mainText.replace(/\|\s*$/, "").trim()}
+          </p>
+        )}
+        <div className="p-3 rounded-lg bg-[var(--bg-primary)] border border-[var(--border-color)]">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-success)]" />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-success)]">
+              Suggested Rewrite (X-Y-Z Formula)
+            </span>
+          </div>
+          <p className="text-xs font-medium text-[var(--text-primary)] leading-relaxed italic">
+            "{rewriteText.replace(/^["']|["']$/g, "")}"
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+      {explanation}
+    </p>
+  );
+};
+
 const CategoryContent = ({ tips }: { tips: TipItem[] }) => {
   if (!tips || tips.length === 0) {
     return <p className="text-xs text-[var(--text-muted)] py-2">No detailed tips available for this section.</p>;
@@ -46,11 +83,7 @@ const CategoryContent = ({ tips }: { tips: TipItem[] }) => {
         return (
           <div
             key={index}
-            className={`p-4 rounded-xl border transition-colors ${
-              isGood
-                ? "bg-[var(--bg-surface-secondary)] border-[var(--border-color)]"
-                : "bg-[var(--bg-surface-secondary)] border-[var(--border-color)]"
-            }`}
+            className="p-4 rounded-xl border transition-colors bg-[var(--bg-surface-secondary)] border-[var(--border-color)]"
           >
             <div className="flex items-start gap-3">
               <span
@@ -66,9 +99,7 @@ const CategoryContent = ({ tips }: { tips: TipItem[] }) => {
                 <p className="text-sm font-bold text-[var(--text-primary)]">
                   {item.tip}
                 </p>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  {item.explanation}
-                </p>
+                {renderExplanation(item.explanation)}
               </div>
             </div>
           </div>

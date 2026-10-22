@@ -9,9 +9,11 @@ const Footer: React.FC = () => {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="inline-flex items-center gap-2.5">
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] font-black text-sm tracking-wider">
-                JF
-              </span>
+              <img
+                src="/logo.png"
+                alt="JobFit Logo"
+                className="w-8 h-8 rounded-lg object-contain shadow-xs"
+              />
               <span className="text-xl font-bold tracking-tight text-[var(--text-primary)]">
                 JobFit
               </span>
