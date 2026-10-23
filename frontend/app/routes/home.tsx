@@ -9,14 +9,48 @@ import { isAuthenticated, listResumes } from "~/lib/api";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "JobFit — Precision AI Resume Analyzer & ATS Optimization" },
+    { title: "JobFit | Resume analyzer and ATS optimization" },
     {
       name: "description",
       content:
-        "Get instant, actionable ATS scoring, keyword matching, and structural recommendations for your resume with JobFit AI.",
+        "See how applicant tracking systems read your resume. Get an ATS score, missing keywords, and ranked fixes for the job you want.",
     },
   ];
 }
+
+const workflowSteps = [
+  {
+    title: "Upload your resume",
+    body: "Send a PDF. JobFit extracts the text and checks whether an ATS can read it at all.",
+  },
+  {
+    title: "Add the role",
+    body: "Paste the job title and description. Every keyword and qualification is matched against it.",
+  },
+  {
+    title: "Fix what matters most",
+    body: "Get a score by category and a list of changes, ordered by how much each one would help.",
+  },
+];
+
+const features = [
+  {
+    title: "ATS simulation",
+    body: "Shows how an applicant tracking system parses your headings, contact details, and layout.",
+  },
+  {
+    title: "Keyword gap analysis",
+    body: "Lists skills and terms the job asks for that are missing or buried in your resume.",
+  },
+  {
+    title: "Bullet-point review",
+    body: "Flags weak verbs, passive phrasing, and achievements that lack a measurable result.",
+  },
+  {
+    title: "Side-by-side preview",
+    body: "Keeps your resume beside the notes, so each edit can be checked where it appears.",
+  },
+];
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,305 +102,200 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-1">
-        {/* If user is logged in, show their Resume Applications Dashboard */}
         {isLoggedIn ? (
-          <section className="app-container py-8 sm:py-12 space-y-8">
-            {/* Dashboard Header & Stats */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[var(--border-color)]">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-success)]" />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-                    Application Workspace
-                  </span>
-                </div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]">
-                  Resume Reports & History
+          /* Signed-in workspace */
+          <section className="app-container py-10 sm:py-14 space-y-10">
+            <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div className="space-y-2">
+                <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
+                  Your resumes
                 </h1>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  Review your recent uploads, inspect ATS ratings, and track your tailored improvements.
+                <p className="max-w-lg text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
+                  Review each report, see where your scores stand, and track the changes you have made.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Link to="/upload" className="btn-primary !text-xs !py-2.5 !px-5 flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  <span>Analyze New Resume</span>
-                </Link>
-              </div>
-            </div>
+              <Link to="/upload" className="btn-primary !text-sm !py-2.5 !px-5 self-start md:self-auto">
+                Analyze a new resume
+              </Link>
+            </header>
 
-            {/* Quick Stats Bar */}
             {analyzedResumes.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="card p-5">
-                  <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
-                    Total Analyzed
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-2">
-                    <span className="text-3xl font-black text-[var(--text-primary)]">
-                      {analyzedResumes.length}
-                    </span>
-                    <span className="text-xs text-[var(--text-secondary)]">resumes</span>
-                  </div>
+              <dl className="grid grid-cols-3 divide-x divide-[var(--border-color)] border-y border-[var(--border-color)]">
+                <div className="py-5 pr-4 sm:pr-6">
+                  <dt className="text-sm text-[var(--text-muted)]">Analyzed</dt>
+                  <dd className="mt-1 font-display text-3xl sm:text-4xl text-[var(--text-primary)]">
+                    {analyzedResumes.length}
+                  </dd>
                 </div>
-
-                <div className="card p-5">
-                  <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
-                    Average ATS Score
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-2">
-                    <span className="text-3xl font-black text-[var(--text-primary)]">
-                      {avgScore !== null ? `${avgScore}%` : "—"}
-                    </span>
-                    <span className="text-xs text-[var(--color-success)] font-medium">Benchmark</span>
-                  </div>
+                <div className="py-5 px-4 sm:px-6">
+                  <dt className="text-sm text-[var(--text-muted)]">Average score</dt>
+                  <dd className="mt-1 font-display text-3xl sm:text-4xl text-[var(--text-primary)]">
+                    {avgScore !== null ? `${avgScore}%` : "—"}
+                  </dd>
                 </div>
-
-                <div className="card p-5">
-                  <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
-                    Highest Rating
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-2">
-                    <span className="text-3xl font-black text-[var(--text-primary)]">
-                      {highestScore !== null ? `${highestScore}%` : "—"}
-                    </span>
-                    <span className="text-xs text-[var(--text-secondary)]">top match</span>
-                  </div>
+                <div className="py-5 pl-4 sm:pl-6">
+                  <dt className="text-sm text-[var(--text-muted)]">Best score</dt>
+                  <dd className="mt-1 font-display text-3xl sm:text-4xl text-[var(--text-primary)]">
+                    {highestScore !== null ? `${highestScore}%` : "—"}
+                  </dd>
                 </div>
-              </div>
+              </dl>
             )}
 
-            {/* Error banner if loading failed */}
             {loadError && (
-              <div className="p-4 rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error-border)] text-sm text-[var(--color-error)] flex items-center justify-between">
+              <div
+                role="alert"
+                className="flex items-center justify-between gap-4 rounded-lg border border-[var(--color-error-border)] bg-[var(--color-error-bg)] px-4 py-3 text-sm text-[var(--color-error)]"
+              >
                 <span>{loadError}</span>
-                <button
-                  onClick={() => loadResumes()}
-                  className="font-semibold underline cursor-pointer text-xs hover:opacity-85"
-                >
-                  Retry
+                <button onClick={() => loadResumes()} className="font-semibold underline underline-offset-4 hover:opacity-80">
+                  Try again
                 </button>
               </div>
             )}
 
-            {/* Resumes Grid / Empty State */}
             {loadingResumes ? (
-              <div className="py-20 flex flex-col items-center justify-center space-y-4">
-                <div className="w-8 h-8 border-2 border-[var(--text-primary)] border-t-transparent rounded-full animate-spin" />
-                <p className="text-sm font-medium text-[var(--text-muted)]">Loading your resume portfolio...</p>
+              <div className="flex flex-col items-center justify-center gap-3 py-24">
+                <div className="h-7 w-7 animate-spin rounded-full border-2 border-[var(--text-primary)] border-t-transparent" />
+                <p className="text-sm text-[var(--text-muted)]">Loading your resumes</p>
               </div>
             ) : analyzedResumes.length > 0 ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                    Uploaded Submissions ({analyzedResumes.length})
-                  </h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {analyzedResumes.map((resume) => (
-                    <ResumeCard
-                      key={resume.id}
-                      resume={resume}
-                      onDelete={handleDeleteResume}
-                    />
-                  ))}
-                </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {analyzedResumes.map((resume) => (
+                  <ResumeCard key={resume.id} resume={resume} onDelete={handleDeleteResume} />
+                ))}
               </div>
             ) : (
-              <div className="card p-12 text-center max-w-lg mx-auto space-y-5 my-8">
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-secondary)]">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.75}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-[var(--text-primary)]">No Resumes Analyzed Yet</h3>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-sm mx-auto">
-                    Upload your first resume along with a job description to generate your in-depth ATS breakdown.
-                  </p>
-                </div>
+              <div className="mx-auto max-w-md space-y-4 py-16 text-center">
+                <h2 className="font-display text-2xl text-[var(--text-primary)]">No reports yet</h2>
+                <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+                  Upload a resume with the job description you are applying for. Your first report takes less than a minute.
+                </p>
                 <div>
-                  <Link to="/upload" className="btn-primary">
-                    Upload Your First Resume
+                  <Link to="/upload" className="btn-primary !text-sm !py-2.5 !px-5">
+                    Upload a resume
                   </Link>
                 </div>
               </div>
             )}
           </section>
         ) : (
-          /* Landing Hero & Value Proposition for Visitors */
-          <div className="space-y-16 sm:space-y-24 py-12 sm:py-20">
-            {/* Hero Section */}
-            <section className="app-container text-center max-w-4xl mx-auto space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border-color)] bg-[var(--bg-surface)] text-xs font-medium text-[var(--text-secondary)]">
-                <span className="w-2 h-2 rounded-full bg-[var(--color-success)]" />
-                Next-Gen ATS Parser & Scoring Engine
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[var(--text-primary)] leading-[1.1]">
-                Master the ATS. Land More High-Impact Interviews.
-              </h1>
-
-              <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
-                JobFit audits your resume against targeted job descriptions using advanced AI. Pinpoint missing keywords, format issues, and receive actionable tips in seconds.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                <Link to="/upload" className="btn-primary !text-sm !py-3 !px-7 w-full sm:w-auto">
-                  Analyze My Resume
-                </Link>
-                <Link to="/auth" className="btn-secondary !text-sm !py-3 !px-7 w-full sm:w-auto">
-                  Create Account
-                </Link>
-              </div>
-
-              {/* Interface Preview Graphic */}
-              <div className="mt-12 pt-6">
-                <div className="card p-3 sm:p-5 shadow-2xl border-[var(--border-color)] bg-[var(--bg-surface)] text-left">
-                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-[var(--border-color)] text-xs text-[var(--text-muted)]">
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[var(--border-color)]" />
-                      <span className="w-3 h-3 rounded-full bg-[var(--border-color)]" />
-                      <span className="w-3 h-3 rounded-full bg-[var(--border-color)]" />
-                      <span className="font-mono text-[11px] ml-2">JobFit Intelligence Preview</span>
-                    </div>
-                    <span className="text-[11px] font-semibold text-[var(--color-success)]">
-                      ATS Verified
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-[var(--text-muted)] font-semibold uppercase">Overall ATS Score</p>
-                        <p className="text-2xl font-black text-[var(--text-primary)] mt-1">88/100</p>
-                      </div>
-                      <span className="px-2 py-1 rounded-md text-xs font-bold bg-[var(--color-success-bg)] text-[var(--color-success)] border border-[var(--color-success-border)]">
-                        Strong
-                      </span>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)]">
-                      <p className="text-xs text-[var(--text-muted)] font-semibold uppercase">Keyword Density</p>
-                      <p className="text-sm font-bold text-[var(--text-primary)] mt-1">High Relevance</p>
-                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">Aligned with Software Engineer role</p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)]">
-                      <p className="text-xs text-[var(--text-muted)] font-semibold uppercase">Action Items</p>
-                      <p className="text-sm font-bold text-[var(--text-primary)] mt-1">4 High-Impact Tips</p>
-                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">Quantify project outcomes</p>
-                    </div>
-                  </div>
+          /* Visitor landing page */
+          <div className="pb-20 sm:pb-28">
+            {/* Hero */}
+            <section className="app-container grid gap-12 pt-14 sm:pt-20 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-16">
+              <div className="space-y-6">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] text-[var(--text-primary)]">
+                  Find out why your resume gets filtered out.
+                </h1>
+                <p className="max-w-xl text-base sm:text-lg leading-relaxed text-[var(--text-secondary)]">
+                  JobFit reads your resume the way an applicant tracking system does, then compares it with the job you want. You get a score, the keywords you are missing, and fixes ranked by impact.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <Link to="/upload" className="btn-primary !text-sm !py-3 !px-7 text-center">
+                    Analyze my resume
+                  </Link>
+                  <Link to="/auth" className="btn-secondary !text-sm !py-3 !px-7 text-center">
+                    Create an account
+                  </Link>
                 </div>
               </div>
+
+              {/* Sample report */}
+              <figure className="relative">
+                <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 sm:p-8 shadow-[0_24px_48px_-24px_rgb(20_33_61/0.25)]">
+                  <div className="flex items-baseline justify-between gap-4 border-b border-[var(--border-color)] pb-5">
+                    <div>
+                      <p className="text-sm text-[var(--text-muted)]">Sample report for Software Engineer</p>
+                      <p className="mt-1 font-display text-5xl font-semibold text-[var(--text-primary)]">
+                        88<span className="text-2xl text-[var(--text-muted)]"> / 100</span>
+                      </p>
+                    </div>
+                    <p className="text-sm font-semibold text-[var(--accent-pass)]">Strong match</p>
+                  </div>
+
+                  <div className="mt-5">
+                    <div className="relative h-1.5 rounded-full bg-[var(--bg-surface-secondary)]">
+                      <div className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent-pass)]" style={{ width: "88%" }} />
+                    </div>
+                    <div className="mt-2 flex justify-between text-xs text-[var(--text-muted)]">
+                      <span>0</span>
+                      <span>50</span>
+                      <span>100</span>
+                    </div>
+                  </div>
+
+                  <ul className="mt-6 divide-y divide-[var(--border-color)] text-sm">
+                    <li className="flex items-start justify-between gap-4 py-3">
+                      <span className="text-[var(--text-primary)]">Missing keywords: Kubernetes, CI/CD</span>
+                      <span className="shrink-0 font-semibold text-[var(--accent-fix)]">Fix</span>
+                    </li>
+                    <li className="flex items-start justify-between gap-4 py-3">
+                      <span className="text-[var(--text-primary)]">Two bullets have no measurable result</span>
+                      <span className="shrink-0 font-semibold text-[var(--accent-fix)]">Fix</span>
+                    </li>
+                    <li className="flex items-start justify-between gap-4 py-3">
+                      <span className="text-[var(--text-primary)]">Contact details and headings parse correctly</span>
+                      <span className="shrink-0 font-semibold text-[var(--accent-pass)]">Pass</span>
+                    </li>
+                  </ul>
+                </div>
+              </figure>
             </section>
 
-            {/* 3-Step Process Workflow */}
-            <section className="app-container">
-              <div className="text-center max-w-xl mx-auto mb-10 space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                  The Workflow
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">
-                  How JobFit Evaluates Your Resume
+            {/* Process */}
+            <section className="app-container mt-24 sm:mt-32">
+              <div className="max-w-xl space-y-3">
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
+                  Three steps from draft to submission
                 </h2>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
-                  A straightforward, three-step evaluation designed to maximize employer interview invitations.
+                <p className="text-sm sm:text-base leading-relaxed text-[var(--text-secondary)]">
+                  Each step feeds the next, so the feedback fits the role you are applying for.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="card p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-center font-bold text-sm text-[var(--text-primary)]">
-                    01
-                  </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Upload PDF Resume</h3>
-                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                    Drop your resume in PDF format. JobFit extracts textual sections cleanly while checking for parser accessibility.
-                  </p>
-                </div>
+              <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-10">
+                {workflowSteps.map((step, index) => (
+                  <li key={step.title} className="border-t-2 border-[var(--text-primary)] pt-5 space-y-3">
+                    <p className="font-display text-2xl text-[var(--text-muted)]">{index + 1}</p>
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)]">{step.title}</h3>
+                    <p className="text-sm leading-relaxed text-[var(--text-secondary)]">{step.body}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
 
-                <div className="card p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-center font-bold text-sm text-[var(--text-primary)]">
-                    02
-                  </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Supply Target Role</h3>
-                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                    Provide the job title and job description you are targeting to trigger specific keyword and qualification mapping.
-                  </p>
-                </div>
+            {/* Features */}
+            <section className="app-container mt-24 sm:mt-32">
+              <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text-primary)]">
+                  What the report covers
+                </h2>
 
-                <div className="card p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-center font-bold text-sm text-[var(--text-primary)]">
-                    03
-                  </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">Receive Actionable Feedback</h3>
-                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                    Explore granular category scores, ATS flags, content impact improvements, and skills alignment advice.
-                  </p>
-                </div>
+                <ul className="grid border-t border-[var(--border-color)] sm:grid-cols-2">
+                  {features.map((feature) => (
+                    <li key={feature.title} className="border-b border-[var(--border-color)] py-6 pr-6 space-y-2">
+                      <h3 className="text-base font-semibold text-[var(--text-primary)]">{feature.title}</h3>
+                      <p className="text-sm leading-relaxed text-[var(--text-secondary)]">{feature.body}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </section>
 
-            {/* Core Features */}
-            <section className="app-container">
-              <div className="card p-8 sm:p-12 space-y-8">
-                <div className="max-w-xl space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                    Built for Accuracy
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">
-                    Everything You Need to Beat the Filter
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-[var(--text-primary)]">ATS Simulation</h4>
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                      Replicates how enterprise ATS screeners score syntax, section headings, and contact info.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-[var(--text-primary)]">Keyword Gap Analysis</h4>
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                      Highlights competencies in the job listing that are missing or underemphasized in your document.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-[var(--text-primary)]">Content & Impact</h4>
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                      Evaluates bullet points for strong action verbs, quantifiable metrics, and active voice.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-[var(--text-primary)]">Instant PDF Preview</h4>
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                      Side-by-side document preview alongside analysis notes for convenient iterative edits.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Ready to evaluate your resume against your target position?
+            {/* Closing call to action */}
+            <section className="app-container mt-24 sm:mt-32">
+              <div className="flex flex-col items-start justify-between gap-6 rounded-lg bg-[var(--ink)] px-8 py-10 sm:flex-row sm:items-center sm:px-12">
+                <div className="space-y-2">
+                  <p className="font-display text-2xl sm:text-3xl font-semibold text-white">
+                    Check your resume against the job you want.
                   </p>
-                  <Link to="/upload" className="btn-primary !text-xs !py-2.5 !px-5">
-                    Start Free Resume Scan
-                  </Link>
+                  <p className="text-sm text-white/70">Your first scan is free, and it takes about a minute.</p>
                 </div>
+                <Link to="/upload" className="shrink-0 rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-[var(--ink)] hover:bg-white/90">
+                  Start a free scan
+                </Link>
               </div>
             </section>
           </div>
