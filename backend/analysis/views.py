@@ -24,6 +24,15 @@ def analyze_resume(request, resume_id):
     if hasattr(resume, "analysis") and not force_reanalyze:
         return Response({"feedback": resume.analysis.feedback})
 
+    import os
+    import re
+
+    if not resume.pdf_file or not os.path.exists(resume.pdf_file.path):
+        return Response(
+            {"error": "The resume PDF file was not found on the server. Please re-upload your resume."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     try:
         feedback = analyze_resume_with_ai(
             pdf_path=resume.pdf_file.path,
@@ -35,8 +44,15 @@ def analyze_resume(request, resume_id):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         error_msg = str(e)
-        if "Connection error" in error_msg:
-            error_msg = "Groq AI connection error. Please verify your GROQ_API_KEY in backend/.env and check your internet connection."
+        if "Connection error" in error_msg or "Failed to connect" in error_msg:
+            error_msg = "Groq AI connection error. Please verify your GROQ_API_KEY and check your internet connection."
+        elif "rate_limit" in error_msg.lower() or "429" in error_msg:
+            error_msg = "AI analysis rate limit reached. Please wait a moment and try again."
+        elif "authentication" in error_msg.lower() or "401" in error_msg or "invalid api key" in error_msg.lower():
+            error_msg = "Invalid AI API credentials. Please check your GROQ_API_KEY configuration."
+        else:
+            # Redact any accidental key patterns or internal credentials
+            error_msg = re.sub(r'(gsk_[a-zA-Z0-9_-]+)', '[REDACTED]', error_msg)
         return Response({"error": error_msg}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Save or update analysis in DB

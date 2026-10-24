@@ -492,6 +492,153 @@ JobFit-AI/
 
 ---
 
+---
+
+## 🚀 Render Deployment Guide
+
+JobFit is fully pre-configured for seamless production deployment on [Render](https://render.com).
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        Render Production Architecture                  │
+├────────────────────────────────┬───────────────────────────────────────┤
+│ Frontend (Static Site)         │ React Router 7 SPA (Vite, Tailwind v4)│
+│ Backend (Web Service)          │ Django 5.2 + Gunicorn + WhiteNoise    │
+│ Relational Database            │ Render Managed PostgreSQL             │
+│ AI Inference Engine            │ Groq Cloud LPUs (gpt-oss-120b)        │
+│ Persistent Storage (Optional)  │ AWS S3 / Cloudflare R2 / Render Disk  │
+└────────────────────────────────┴───────────────────────────────────────┘
+```
+
+---
+
+### Method 1: Automated Blueprint Deployment (`render.yaml`)
+
+The repository includes a ready-to-use [`render.yaml`](./render.yaml) file defining the entire infrastructure.
+
+1. **Push your code to GitHub**:
+   ```bash
+   git add .
+   git commit -m "chore: prepare for Render production deployment"
+   git push origin main
+   ```
+2. **Log in to [Render Dashboard](https://dashboard.render.com/)**.
+3. Click **New +** ➔ **Blueprint**.
+4. Connect your GitHub repository (`JobFit-django`).
+5. Render will automatically detect `render.yaml` and configure:
+   - **`jobfit-db`** (PostgreSQL Database)
+   - **`jobfit-backend`** (Python Web Service)
+   - **`jobfit-frontend`** (Static Site with SPA rewrite rules)
+6. Supply the required secret when prompted:
+   - `GROQ_API_KEY`: Your Groq API key from [console.groq.com](https://console.groq.com).
+7. Click **Apply**. Render will provision and deploy all services simultaneously.
+
+---
+
+### Method 2: Manual Service-by-Service Deployment
+
+If you prefer to configure each service manually in the Render dashboard:
+
+#### Step 1: Create a PostgreSQL Database
+1. Go to **Dashboard** ➔ **New +** ➔ **PostgreSQL**.
+2. **Name**: `jobfit-db`
+3. **Database**: `jobfit`
+4. **User**: `jobfit_user`
+5. **Plan**: `Free`
+6. Click **Create Database**.
+7. Once created, copy the **Internal Database URL** (e.g. `postgresql://...`).
+
+#### Step 2: Deploy the Django Backend Web Service
+1. Go to **Dashboard** ➔ **New +** ➔ **Web Service**.
+2. Connect your GitHub repository.
+3. Configure the settings:
+   - **Name**: `jobfit-backend`
+   - **Root Directory**: `backend`
+   - **Runtime**: `Python 3`
+   - **Build Command**: `./build.sh`
+   - **Start Command**: `gunicorn core.wsgi:application`
+   - **Plan**: `Free`
+4. In **Advanced** ➔ **Health Check Path**: `/health/`
+5. Add the following **Environment Variables**:
+
+| Variable | Recommended Value | Notes |
+|:---|:---|:---|
+| `PYTHON_VERSION` | `3.11.9` | Ensures compatible Python runtime |
+| `DEBUG` | `False` | Disables debug mode in production |
+| `SECRET_KEY` | *(Auto-generate or 50+ random chars)* | Keep this secure |
+| `DATABASE_URL` | *(Paste Internal Database URL from Step 1)* | Connects PostgreSQL |
+| `ALLOWED_HOSTS` | `.onrender.com,localhost,127.0.0.1` | Permits Render domains |
+| `GROQ_API_KEY` | `gsk_...` | From [console.groq.com](https://console.groq.com) |
+| `GROQ_MODEL` | `openai/gpt-oss-120b` | High-accuracy inference model |
+| `CORS_ALLOW_ALL_ORIGINS`| `False` | Restricts CORS in production |
+| `CORS_ALLOWED_ORIGINS` | `https://your-frontend.onrender.com` | Update with your frontend URL |
+| `CSRF_TRUSTED_ORIGINS` | `https://*.onrender.com` | Permits HTTPS CSRF checks |
+
+6. Click **Create Web Service**. Wait for the build and migration to succeed.
+7. Copy your backend URL: `https://jobfit-backend.onrender.com`.
+
+#### Step 3: Deploy the React Frontend Static Site
+1. Go to **Dashboard** ➔ **New +** ➔ **Static Site**.
+2. Connect your GitHub repository.
+3. Configure the settings:
+   - **Name**: `jobfit-frontend`
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `build/client`
+4. Add the **Environment Variable**:
+   - `VITE_API_BASE_URL`: `https://jobfit-backend.onrender.com/api` (use your actual backend URL from Step 2)
+5. **Critical for SPA Client-Side Routing**:
+   - In the frontend service settings, scroll to **Redirects / Rewrites**.
+   - Add rule:
+     - **Type**: `Rewrite`
+     - **Source**: `/*`
+     - **Destination**: `/index.html`
+   *(This prevents 404 errors when refreshing `/resume/:id`, `/upload`, or `/auth`).*
+6. Click **Create Static Site**.
+7. Once deployed, copy your frontend URL (e.g. `https://jobfit-frontend.onrender.com`) and add it to `CORS_ALLOWED_ORIGINS` on your backend service.
+
+---
+
+### 🛡️ Production Security & Persistent Storage
+
+- **Ephemeral Storage Notice**:
+  Render's Free Tier web services use an ephemeral filesystem. Files saved to disk are cleared on restart.
+  - For full enterprise production, connect external persistent object storage:
+    - **AWS S3** or **Cloudflare R2** via `django-storages` + `boto3`.
+    - Alternatively, attach a **Render Persistent Disk** (`/var/data`) on paid Render instances.
+- **Access Isolation**:
+  The application enforces scoped JWT ownership so candidates can never inspect, analyze, or delete resumes belonging to other users.
+
+---
+
+### 🩺 Verifying Live Deployment
+
+1. **Backend Health Check**:
+   Visit `https://your-backend.onrender.com/health/` in your browser. Expected response:
+   ```json
+   {
+     "status": "ok",
+     "service": "jobfit-ai-backend",
+     "database": "connected"
+   }
+   ```
+2. **Frontend Connectivity**:
+   Open `https://your-frontend.onrender.com`. Create an account, upload a test PDF resume, and verify that ATS scoring completes within 2–4 seconds.
+
+---
+
+### ⚠️ Common Troubleshooting
+
+| Issue | Cause | Fix |
+|:---|:---|:---|
+| **CORS error in browser console** | Frontend domain not in `CORS_ALLOWED_ORIGINS` | Add `https://your-frontend.onrender.com` to backend environment variables (no trailing slash). |
+| **404 error when refreshing page** | Static site missing SPA rewrite rule | Add Render rewrite rule `/*` ➔ `/index.html` in Static Site settings. |
+| **`DisallowedHost` error** | Render host not recognized | Ensure `ALLOWED_HOSTS` includes `.onrender.com`. |
+| **`GROQ_API_KEY is not configured`** | Missing secret in backend service | Set `GROQ_API_KEY` in Render backend Environment tab. |
+| **Static files (CSS/admin) missing** | `collectstatic` did not run | Verify `backend/build.sh` executed `python manage.py collectstatic --no-input`. |
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.

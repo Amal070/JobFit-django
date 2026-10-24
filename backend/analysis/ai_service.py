@@ -204,7 +204,7 @@ def analyze_resume_with_ai(pdf_path: str, job_title: str, job_description: str, 
     if not settings.GROQ_API_KEY or not settings.GROQ_API_KEY.strip():
         raise ValueError("GROQ_API_KEY is not configured. Please add your Groq API key to backend/.env.")
 
-    client = Groq(api_key=settings.GROQ_API_KEY.strip())
+    client = Groq(api_key=settings.GROQ_API_KEY.strip(), timeout=45.0)
 
     system_instruction = (
         "You are an Elite Senior Technical Recruiter, ATS (Applicant Tracking System) Evaluation Specialist, "

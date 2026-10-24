@@ -42,6 +42,22 @@ def upload_resume(request):
     if not pdf_file:
         return Response({"error": "No PDF file provided"}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Validate file extension
+    file_name = pdf_file.name.lower()
+    if not file_name.endswith(".pdf"):
+        return Response(
+            {"error": "Invalid file format. Only PDF resumes are supported."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    # Validate maximum file size (20MB)
+    max_size_bytes = 20 * 1024 * 1024
+    if pdf_file.size > max_size_bytes:
+        return Response(
+            {"error": "File size exceeds the 20MB limit."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     resume = Resume.objects.create(
         user=request.user,
         pdf_file=pdf_file,

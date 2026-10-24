@@ -47,7 +47,7 @@ const Navbar = () => {
               JobFit
             </span>
             <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mt-0.5">
-              Resume AI
+              Resume ANALYZE AI
             </span>
           </div>
         </Link>

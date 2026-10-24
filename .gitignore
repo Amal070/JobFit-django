@@ -25,6 +25,8 @@ media/
 **/media/resumes/
 **/media/resumes/pdfs/*
 !**/media/resumes/pdfs/.gitkeep
+staticfiles/
+**/staticfiles/
 
 # ---------------------------------------------------------------------
 # Python & Backend Artifacts

@@ -1,6 +1,15 @@
 import type { Feedback, Resume } from "../types";
 
 export const getApiBase = () => {
+  let envUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
+  if (envUrl) {
+    // Strip trailing slashes to avoid double slashes when building endpoint paths
+    envUrl = envUrl.replace(/\/+$/, "");
+    if (!envUrl.endsWith("/api")) {
+      envUrl = `${envUrl}/api`;
+    }
+    return envUrl;
+  }
   if (typeof window !== "undefined") {
     const host = window.location.hostname || "127.0.0.1";
     return `http://${host}:8000/api`;
