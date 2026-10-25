@@ -21,14 +21,14 @@ const CategoryRow = ({ title, score }: CategoryRowProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 p-3.5 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <span className="text-sm font-semibold text-[var(--text-primary)]">{title}</span>
+    <div className="flex flex-col gap-2 p-3 sm:p-3.5 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)]">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="text-xs sm:text-sm font-semibold text-[var(--text-primary)] truncate">{title}</span>
           <ScoreBadge score={score} />
         </div>
-        <span className={`text-sm font-bold ${getScoreColor(score)}`}>
-          {score}<span className="text-xs font-normal text-[var(--text-muted)]">/100</span>
+        <span className={`text-xs sm:text-sm font-bold flex-shrink-0 ${getScoreColor(score)}`}>
+          {score}<span className="text-[10px] sm:text-xs font-normal text-[var(--text-muted)]">/100</span>
         </span>
       </div>
       {/* Progress Bar */}
@@ -44,15 +44,15 @@ const CategoryRow = ({ title, score }: CategoryRowProps) => {
 
 const Summary = ({ feedback }: { feedback: Feedback }) => {
   return (
-    <div className="card p-6 md:p-8 space-y-6">
-      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 pb-6 border-b border-[var(--border-color)]">
+    <div className="card p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-8 pb-5 sm:pb-6 border-b border-[var(--border-color)]">
         <ScoreGauge score={feedback.overallScore} />
 
-        <div className="text-center sm:text-left space-y-2 flex-1">
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+        <div className="text-center sm:text-left space-y-1.5 sm:space-y-2 flex-1">
+          <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
             Overall ATS Assessment
           </h2>
-          <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
             Your composite score represents overall ATS alignment, structural clarity, relevant keyword density, and qualitative impact.
           </p>
         </div>
@@ -62,7 +62,7 @@ const Summary = ({ feedback }: { feedback: Feedback }) => {
         <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
           Category Performance
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
           <CategoryRow title="Tone & Style" score={feedback.toneAndStyle.score} />
           <CategoryRow title="Content Impact" score={feedback.content.score} />
           <CategoryRow title="Structure & Layout" score={feedback.structure.score} />

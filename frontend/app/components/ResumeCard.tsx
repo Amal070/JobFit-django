@@ -40,27 +40,27 @@ const ResumeCard: React.FC<ResumeCardProps> = ({
   };
 
   return (
-    <div className="card p-6 flex flex-col justify-between hover:border-[var(--text-primary)] transition-all duration-200 group">
+    <div className="card p-4 sm:p-6 flex flex-col justify-between hover:border-[var(--text-primary)] transition-all duration-200 group">
       <div>
         {/* Top Header: Company/Role + Score Badge */}
-        <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
           <div className="min-w-0 flex-1">
             <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
               Target Company
             </span>
-            <h3 className="text-lg font-bold text-[var(--text-primary)] truncate mt-0.5">
+            <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)] truncate mt-0.5">
               {companyName || "General Application"}
             </h3>
-            <p className="text-xs text-[var(--text-secondary)] truncate mt-1">
+            <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5 sm:mt-1">
               {jobTitle || "Resume Assessment"}
             </p>
           </div>
 
           <div className="flex flex-col items-end flex-shrink-0">
             <div
-              className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center border ${scoreTheme.bg} ${scoreTheme.border || "border-[var(--border-color)]"}`}
+              className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center border ${scoreTheme.bg} ${scoreTheme.border || "border-[var(--border-color)]"}`}
             >
-              <span className={`text-lg font-black leading-none ${scoreTheme.text}`}>
+              <span className={`text-base sm:text-lg font-black leading-none ${scoreTheme.text}`}>
                 {score !== null ? score : "—"}
               </span>
               <span className="text-[9px] font-semibold text-[var(--text-muted)] mt-0.5">
@@ -75,15 +75,15 @@ const ResumeCard: React.FC<ResumeCardProps> = ({
 
         {/* Category Mini Indicators */}
         {feedback && (
-          <div className="grid grid-cols-2 gap-2 my-4 pt-3 border-t border-[var(--border-color)] text-xs text-[var(--text-secondary)]">
+          <div className="grid grid-cols-2 gap-2 my-3 sm:my-4 pt-3 border-t border-[var(--border-color)] text-xs text-[var(--text-secondary)]">
             <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-[var(--bg-surface-secondary)]">
-              <span>ATS Score</span>
+              <span className="text-[11px] sm:text-xs">ATS Score</span>
               <span className="font-semibold text-[var(--text-primary)]">
                 {feedback.ATS?.score ?? "—"}%
               </span>
             </div>
             <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-[var(--bg-surface-secondary)]">
-              <span>Skills Match</span>
+              <span className="text-[11px] sm:text-xs">Skills Match</span>
               <span className="font-semibold text-[var(--text-primary)]">
                 {feedback.skills?.score ?? "—"}%
               </span>
@@ -93,10 +93,10 @@ const ResumeCard: React.FC<ResumeCardProps> = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-2 pt-4 border-t border-[var(--border-color)]">
+      <div className="flex items-center gap-2 pt-3 sm:pt-4 border-t border-[var(--border-color)]">
         <Link
           to={`/resume/${id}`}
-          className="btn-primary !text-xs !py-2 flex-1 text-center"
+          className="btn-primary !text-xs !py-2.5 flex-1 text-center min-h-[38px]"
         >
           View Full Report
         </Link>
@@ -106,7 +106,7 @@ const ResumeCard: React.FC<ResumeCardProps> = ({
           disabled={isDeleting}
           aria-label="Delete resume"
           title="Delete resume analysis"
-          className="p-2 rounded-full border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--color-error)] hover:border-[var(--color-error-border)] hover:bg-[var(--color-error-bg)] transition-colors cursor-pointer disabled:opacity-50"
+          className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--color-error)] hover:border-[var(--color-error-border)] hover:bg-[var(--color-error-bg)] transition-colors cursor-pointer disabled:opacity-50 flex-shrink-0"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

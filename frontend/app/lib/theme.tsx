@@ -132,9 +132,9 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Select theme mode: light, dark, or system"
           aria-expanded={isOpen}
-          className="px-1.5 py-1 text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer flex items-center gap-1"
+          className="px-1 sm:px-1.5 py-1 text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer flex items-center gap-0.5 sm:gap-1"
         >
-          <span className="capitalize">{theme}</span>
+          <span className="capitalize hidden sm:inline">{theme}</span>
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>

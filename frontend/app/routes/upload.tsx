@@ -199,13 +199,13 @@ const Upload = () => {
     <div className="app-page">
       <Navbar />
 
-      <main className="flex-1 py-10 sm:py-16">
+      <main className="flex-1 py-6 sm:py-12">
         <div className="app-container max-w-3xl">
           {/* Breadcrumb / Back Link */}
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors min-h-[36px] py-1"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -215,11 +215,11 @@ const Upload = () => {
           </div>
 
           {/* Heading */}
-          <div className="space-y-2 mb-8">
+          <div className="space-y-1.5 sm:space-y-2 mb-6 sm:mb-8">
             <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-surface)] text-[11px] font-semibold text-[var(--text-muted)]">
               <span>ATS Readiness Check</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
+            <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
               Analyze Your Resume
             </h1>
             <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -229,7 +229,7 @@ const Upload = () => {
 
           {/* Error Message Alert */}
           {error && (
-            <div className="p-4 mb-6 rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error-border)] text-xs md:text-sm text-[var(--color-error)] flex items-start gap-3">
+            <div className="p-3.5 sm:p-4 mb-6 rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error-border)] text-xs md:text-sm text-[var(--color-error)] flex items-start gap-3">
               <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -247,15 +247,15 @@ const Upload = () => {
 
           {/* Processing / Loading View */}
           {isProcessing ? (
-            <div className="card p-8 sm:p-12 text-center space-y-6 animate-in fade-in duration-300">
-              <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
+            <div className="card p-6 sm:p-12 text-center space-y-6 animate-in fade-in duration-300">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full border-4 border-[var(--border-color)]" />
                 <div className="absolute inset-0 rounded-full border-4 border-[var(--text-primary)] border-t-transparent animate-spin" />
-                <span className="text-lg font-black text-[var(--text-primary)]">AI</span>
+                <span className="text-base sm:text-lg font-black text-[var(--text-primary)]">AI</span>
               </div>
 
-              <div className="space-y-2 max-w-md mx-auto">
-                <h3 className="text-lg font-bold text-[var(--text-primary)]">
+              <div className="space-y-1.5 sm:space-y-2 max-w-md mx-auto">
+                <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)]">
                   Evaluating Your Application
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -281,9 +281,9 @@ const Upload = () => {
             </div>
           ) : (
             /* Upload & Details Form */
-            <form id="upload-form" onSubmit={handleSubmit} className="space-y-6">
+            <form id="upload-form" onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* File Upload Section */}
-              <div className="card p-6 space-y-3">
+              <div className="card p-4 sm:p-6 space-y-3">
                 <div className="flex items-center justify-between">
                   <label htmlFor="resume-file-input" className="input-label !mb-0">
                     Resume Document (PDF) <span className="text-[var(--color-error)]">*</span>
@@ -294,12 +294,12 @@ const Upload = () => {
               </div>
 
               {/* Target Job Information */}
-              <div className="card p-6 space-y-4">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">
+              <div className="card p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">
                   Target Opportunity
                 </h3>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label htmlFor="company-name" className="input-label">
                       Company Name
@@ -342,7 +342,7 @@ const Upload = () => {
                     </span>
                   </div>
                   <textarea
-                    rows={6}
+                    rows={5}
                     id="job-description"
                     name="job-description"
                     value={jobDescription}
@@ -357,7 +357,7 @@ const Upload = () => {
               </div>
 
               {/* Form Actions */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-1 sm:pt-2">
                 <Link to="/" className="btn-secondary w-full sm:w-auto text-center order-2 sm:order-1">
                   Cancel
                 </Link>

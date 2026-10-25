@@ -36,59 +36,59 @@ const WipeApp = () => {
     <div className="app-page">
       <Navbar />
 
-      <main className="flex-1 py-12">
-        <div className="app-container max-w-2xl space-y-8">
-          <div className="space-y-1.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
+      <main className="flex-1 py-6 sm:py-12">
+        <div className="app-container max-w-2xl space-y-6 sm:space-y-8">
+          <div className="space-y-1 sm:space-y-1.5">
+            <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
               Account & Settings
             </h1>
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)]">
               Manage your active session, privacy settings, and resume storage preferences.
             </p>
           </div>
 
           {/* Account Profile Card */}
-          <div className="card p-6 sm:p-8 space-y-6">
-            <h2 className="text-base font-bold text-[var(--text-primary)]">
+          <div className="card p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
               Profile & Session Information
             </h2>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)]">
-                <div>
-                  <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] gap-3">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] sm:text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                     Username
                   </p>
-                  <p className="text-base font-bold text-[var(--text-primary)] mt-0.5">
+                  <p className="text-sm sm:text-base font-bold text-[var(--text-primary)] mt-0.5 truncate">
                     {username || "Authenticated User"}
                   </p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-[var(--color-success-bg)] text-[var(--color-success)] border border-[var(--color-success-border)]">
+                <span className="px-2.5 py-0.5 sm:py-1 rounded-full text-xs font-bold bg-[var(--color-success-bg)] text-[var(--color-success)] border border-[var(--color-success-border)] flex-shrink-0">
                   Active
                 </span>
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)]">
-                <div>
-                  <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+              <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] gap-3">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] sm:text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                     Authentication Mode
                   </p>
-                  <p className="text-sm font-semibold text-[var(--text-primary)] mt-0.5">
+                  <p className="text-xs sm:text-sm font-semibold text-[var(--text-primary)] mt-0.5 truncate">
                     JWT Session Token (Encrypted)
                   </p>
                 </div>
-                <span className="text-xs text-[var(--text-muted)]">Secure</span>
+                <span className="text-xs text-[var(--text-muted)] flex-shrink-0">Secure</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-xs text-[var(--text-muted)]">
+            <div className="pt-3 sm:pt-4 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+              <p className="text-xs text-[var(--text-muted)] text-center sm:text-left">
                 Signing out clears your credentials from this device.
               </p>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="btn-secondary !text-xs !py-2 !px-5 w-full sm:w-auto"
+                className="btn-secondary !text-xs !py-2.5 !px-5 w-full sm:w-auto"
               >
                 Sign Out
               </button>
@@ -96,8 +96,8 @@ const WipeApp = () => {
           </div>
 
           {/* Data & Privacy Card */}
-          <div className="card p-6 sm:p-8 space-y-4">
-            <h2 className="text-base font-bold text-[var(--text-primary)]">
+          <div className="card p-4 sm:p-6 md:p-8 space-y-3 sm:space-y-4">
+            <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
               Data Storage & Privacy
             </h2>
             <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -105,7 +105,7 @@ const WipeApp = () => {
             </p>
 
             <div className="pt-2">
-              <Link to="/" className="btn-primary !text-xs !py-2.5 !px-5">
+              <Link to="/" className="btn-primary !text-xs !py-2.5 !px-5 w-full sm:w-auto text-center">
                 Go to Dashboard
               </Link>
             </div>

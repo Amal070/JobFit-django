@@ -49,22 +49,22 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
       {/* Top Header with Brand, Navigation and Theme Switcher */}
-      <header className="w-full border-b border-[var(--border-color)] bg-[var(--bg-surface)] py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
+      <header className="w-full border-b border-[var(--border-color)] bg-[var(--bg-surface)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
+          <Link to="/" className="flex items-center gap-2 sm:gap-2.5">
             <img
               src="/logo.png"
               alt="JobFit Logo"
-              className="w-8 h-8 rounded-lg object-contain shadow-xs"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-contain shadow-xs"
             />
-            <span className="text-lg font-bold tracking-tight text-[var(--text-primary)]">
+            <span className="text-base sm:text-lg font-bold tracking-tight text-[var(--text-primary)]">
               JobFit
             </span>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-3 py-1.5 rounded-full hover:bg-[var(--bg-surface-secondary)] transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2.5 sm:px-3 py-1.5 rounded-full hover:bg-[var(--bg-surface-secondary)] transition-colors"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -77,32 +77,10 @@ const Auth = () => {
       </header>
 
       {/* Main Auth Form Container */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6">
-        <div className="w-full max-w-md mb-3 flex items-center justify-between">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-secondary)] transition-all shadow-xs"
-          >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span>Back to home</span>
-          </Link>
-        </div>
-
-        <div className="card max-w-md w-full p-8 sm:p-10 space-y-6 shadow-xl">
-          <div className="space-y-1.5 text-center">
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+      <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 py-6 sm:py-12">
+        <div className="card max-w-md w-full p-5 sm:p-8 md:p-10 space-y-5 sm:space-y-6 shadow-xl">
+          <div className="space-y-1 sm:space-y-1.5 text-center">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
               {isRegister ? "Create Your JobFit Account" : "Welcome Back"}
             </h1>
             <p className="text-xs sm:text-sm text-[var(--text-secondary)]">

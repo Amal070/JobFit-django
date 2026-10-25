@@ -113,14 +113,14 @@ export const AccordionHeader: React.FC<AccordionHeaderProps> = ({
       onClick={() => toggleItem(itemId)}
       aria-expanded={isActive}
       className={`
-        w-full px-5 py-4 text-left
+        w-full px-3.5 sm:px-5 py-3 sm:py-4 text-left
         focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--text-primary)]
         transition-colors duration-150 flex items-center justify-between cursor-pointer
         hover:bg-[var(--bg-surface-secondary)]
         ${className}
       `}
     >
-      <div className="flex items-center space-x-3 min-w-0 flex-1">
+      <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
         {iconPosition === "left" && (icon || defaultIcon)}
         <div className="flex-1 min-w-0">{children}</div>
       </div>
@@ -148,7 +148,7 @@ export const AccordionContent: React.FC<AccordionContentProps> = ({
   return (
     <div
       className={`
-        border-t border-[var(--border-color)] px-5 py-4 bg-[var(--bg-surface)]
+        border-t border-[var(--border-color)] px-3.5 sm:px-5 py-3 sm:py-4 bg-[var(--bg-surface)]
         animate-in fade-in-50 duration-200
         ${className}
       `}

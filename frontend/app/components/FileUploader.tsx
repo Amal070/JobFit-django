@@ -55,11 +55,11 @@ const FileUploader = ({ onFileSelect, selectedFile }: FileUploaderProps) => {
         <input {...getInputProps()} id="resume-file-input" />
 
         {currentFile ? (
-          <div className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5 min-w-0 w-full sm:w-auto">
+          <div className="p-3.5 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
               {/* PDF Icon Badge */}
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex-shrink-0 text-[var(--text-primary)]">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex-shrink-0 text-[var(--text-primary)]">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -71,23 +71,23 @@ const FileUploader = ({ onFileSelect, selectedFile }: FileUploaderProps) => {
 
               {/* File details */}
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-[var(--text-primary)] truncate" title={currentFile.name}>
+                <p className="text-xs sm:text-sm font-semibold text-[var(--text-primary)] truncate" title={currentFile.name}>
                   {currentFile.name}
                 </p>
-                <div className="flex items-center gap-2 mt-0.5 text-xs text-[var(--text-muted)]">
+                <div className="flex items-center gap-2 mt-0.5 text-[11px] sm:text-xs text-[var(--text-muted)]">
                   <span>{formatSize(currentFile.size)}</span>
                   <span>•</span>
-                  <span className="text-[var(--color-success)] font-medium">Ready for analysis</span>
+                  <span className="text-[var(--color-success)] font-medium">Ready</span>
                 </div>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-3 sm:pt-0 border-t sm:border-t-0 border-[var(--border-color)]">
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-2.5 sm:pt-0 border-t sm:border-t-0 border-[var(--border-color)]">
               <button
                 type="button"
                 onClick={open}
-                className="btn-secondary !text-xs !py-1.5 !px-3"
+                className="btn-secondary !text-xs !py-1.5 !px-3 flex-1 sm:flex-initial text-center"
               >
                 Change File
               </button>
@@ -96,7 +96,7 @@ const FileUploader = ({ onFileSelect, selectedFile }: FileUploaderProps) => {
                 onClick={handleRemove}
                 title="Remove file"
                 aria-label="Remove uploaded resume"
-                className="p-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--color-error)] hover:border-[var(--color-error-border)] hover:bg-[var(--color-error-bg)] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--color-error)] hover:border-[var(--color-error-border)] hover:bg-[var(--color-error-bg)] transition-colors cursor-pointer flex-shrink-0"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -105,9 +105,9 @@ const FileUploader = ({ onFileSelect, selectedFile }: FileUploaderProps) => {
             </div>
           </div>
         ) : (
-          <div className="p-8 sm:p-10 text-center flex flex-col items-center justify-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-secondary)]">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="p-6 sm:p-10 text-center flex flex-col items-center justify-center space-y-2.5 sm:space-y-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-secondary)]">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -117,10 +117,10 @@ const FileUploader = ({ onFileSelect, selectedFile }: FileUploaderProps) => {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[var(--text-primary)]">
+              <p className="text-xs sm:text-sm font-semibold text-[var(--text-primary)]">
                 {isDragActive ? "Drop your PDF file here" : "Click to select or drag and drop your resume"}
               </p>
-              <p className="text-xs text-[var(--text-muted)] mt-1">
+              <p className="text-[11px] sm:text-xs text-[var(--text-muted)] mt-1">
                 Accepted format: PDF only (maximum file size 20 MB)
               </p>
             </div>

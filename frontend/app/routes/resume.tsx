@@ -71,12 +71,12 @@ const ResumePage = () => {
 
       <main className="flex-1">
         {/* Top Control Bar */}
-        <section className="border-b border-[var(--border-color)] bg-[var(--bg-surface)] py-4">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+        <section className="border-b border-[var(--border-color)] bg-[var(--bg-surface)] py-3 sm:py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
               <Link
                 to="/"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-primary)] text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-primary)] text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex-shrink-0"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -84,26 +84,26 @@ const ResumePage = () => {
                 <span>Dashboard</span>
               </Link>
 
-              <div className="min-w-0">
-                <h1 className="text-base sm:text-lg font-bold text-[var(--text-primary)] truncate">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-sm sm:text-lg font-bold text-[var(--text-primary)] truncate">
                   {resume?.companyName ? `${resume.companyName} — ` : ""}
                   {resume?.jobTitle || "Resume Assessment"}
                 </h1>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto">
+            <div className="flex items-center gap-2 self-stretch sm:self-auto justify-end">
               {resumeUrl && (
                 <a
                   href={resumeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-secondary !text-xs !py-1.5 !px-3.5"
+                  className="btn-secondary !text-xs !py-1.5 !px-3.5 flex-1 sm:flex-initial text-center"
                 >
                   Open PDF
                 </a>
               )}
-              <Link to="/upload" className="btn-primary !text-xs !py-1.5 !px-4">
+              <Link to="/upload" className="btn-primary !text-xs !py-1.5 !px-4 flex-1 sm:flex-initial text-center">
                 Scan Another
               </Link>
             </div>
@@ -111,51 +111,57 @@ const ResumePage = () => {
         </section>
 
         {/* Mobile View Switcher (Report vs PDF) */}
-        <div className="lg:hidden border-b border-[var(--border-color)] bg-[var(--bg-surface-secondary)] px-4 py-2">
+        <div className="lg:hidden sticky top-14 z-20 border-b border-[var(--border-color)] bg-[var(--bg-surface-secondary)]/95 backdrop-blur-xs px-4 py-2">
           <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
             <button
               type="button"
               onClick={() => setMobileTab("analysis")}
-              className={`py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
+              className={`py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
                 mobileTab === "analysis"
                   ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs"
                   : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
             >
-              Analysis Report
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span>Analysis Report</span>
             </button>
             <button
               type="button"
               onClick={() => setMobileTab("pdf")}
-              className={`py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
+              className={`py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
                 mobileTab === "pdf"
                   ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs"
                   : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
             >
-              Resume PDF Preview
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              <span>Resume PDF Preview</span>
             </button>
           </div>
         </div>
 
         {/* Loading and Error states */}
         {loading ? (
-          <div className="py-24 flex flex-col items-center justify-center space-y-4">
+          <div className="py-20 sm:py-24 flex flex-col items-center justify-center space-y-4 px-4 text-center">
             <div className="w-9 h-9 border-2 border-[var(--text-primary)] border-t-transparent rounded-full animate-spin" />
             <p className="text-sm font-medium text-[var(--text-muted)]">
               Generating your comprehensive ATS score report...
             </p>
           </div>
         ) : loadError ? (
-          <div className="max-w-xl mx-auto py-16 px-4">
-            <div className="card p-8 text-center space-y-4">
+          <div className="max-w-xl mx-auto py-12 sm:py-16 px-4">
+            <div className="card p-6 sm:p-8 text-center space-y-4">
               <div className="w-12 h-12 mx-auto rounded-full bg-[var(--color-error-bg)] border border-[var(--color-error-border)] text-[var(--color-error)] flex items-center justify-center font-bold text-xl">
                 !
               </div>
               <h2 className="text-xl font-bold text-[var(--text-primary)]">Unable to Load Review</h2>
               <p className="text-xs text-[var(--text-secondary)]">{loadError}</p>
               <div className="pt-2">
-                <Link to="/" className="btn-primary">
+                <Link to="/" className="btn-primary w-full sm:w-auto">
                   Return to Dashboard
                 </Link>
               </div>
@@ -163,8 +169,8 @@ const ResumePage = () => {
           </div>
         ) : feedback ? (
           /* Main Results Layout: 2-Column Desktop, Responsive Mobile */
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Left Column: PDF Preview (Sticky on Desktop) */}
               <div
                 className={`lg:col-span-5 ${
@@ -172,22 +178,32 @@ const ResumePage = () => {
                 } lg:sticky lg:top-24`}
               >
                 <div className="card overflow-hidden">
-                  <div className="p-3.5 border-b border-[var(--border-color)] bg-[var(--bg-surface-secondary)] flex items-center justify-between">
+                  <div className="p-3 sm:p-3.5 border-b border-[var(--border-color)] bg-[var(--bg-surface-secondary)] flex items-center justify-between">
                     <span className="text-xs font-semibold text-[var(--text-secondary)]">
                       Document Source Preview
                     </span>
                     {resumeUrl && (
-                      <a
-                        href={resumeUrl}
-                        download={`${resume?.companyName || "Resume"}.pdf`}
-                        className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium"
-                      >
-                        Download
-                      </a>
+                      <div className="flex items-center gap-3">
+                        <a
+                          href={resumeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium underline"
+                        >
+                          Open Tab
+                        </a>
+                        <a
+                          href={resumeUrl}
+                          download={`${resume?.companyName || "Resume"}.pdf`}
+                          className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium"
+                        >
+                          Download
+                        </a>
+                      </div>
                     )}
                   </div>
                   {resumeUrl ? (
-                    <div className="h-[550px] lg:h-[760px] w-full bg-[var(--bg-surface-secondary)]">
+                    <div className="h-[480px] sm:h-[600px] lg:h-[760px] w-full bg-[var(--bg-surface-secondary)]">
                       <iframe
                         src={resumeUrl}
                         className="w-full h-full border-0"
@@ -204,7 +220,7 @@ const ResumePage = () => {
 
               {/* Right Column: Full Feedback Report */}
               <div
-                className={`lg:col-span-7 space-y-6 ${
+                className={`lg:col-span-7 space-y-5 sm:space-y-6 ${
                   mobileTab === "analysis" ? "block" : "hidden lg:block"
                 }`}
               >
@@ -218,7 +234,7 @@ const ResumePage = () => {
                 />
 
                 {/* Expandable Category Details */}
-                <div className="card p-6 md:p-8">
+                <div className="card p-4 sm:p-6 md:p-8">
                   <Details feedback={feedback} />
                 </div>
               </div>
