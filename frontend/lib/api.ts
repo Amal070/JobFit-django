@@ -11,8 +11,16 @@ export const getApiBase = () => {
     return envUrl;
   }
   if (typeof window !== "undefined") {
-    const host = window.location.hostname || "127.0.0.1";
-    return `http://${host}:8000/api`;
+    const host = window.location.hostname || "";
+    // If deployed on Render or custom domain and VITE_API_BASE_URL wasn't baked in,
+    // default to the deployed JobFit backend rather than trying http://frontend:8000
+    if (host.endsWith(".onrender.com")) {
+      return "https://jobfit-backend-g1i5.onrender.com/api";
+    }
+    if (host && host !== "localhost" && host !== "127.0.0.1" && host !== "0.0.0.0") {
+      return `${window.location.origin}/api`;
+    }
+    return `http://${host || "127.0.0.1"}:8000/api`;
   }
   return "http://127.0.0.1:8000/api";
 };

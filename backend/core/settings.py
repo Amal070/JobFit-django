@@ -173,6 +173,7 @@ if cors_origins_env:
     CORS_ALLOWED_ORIGINS = [orig.strip() for orig in cors_origins_env.split(",") if orig.strip()]
 else:
     CORS_ALLOWED_ORIGINS = [
+        "https://jobfit-frontend.onrender.com",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:5174",
@@ -181,12 +182,19 @@ else:
         "http://127.0.0.1:3000",
     ]
 
+# Allow all *.onrender.com origins for CORS preflights and cross-origin requests
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.onrender\.com$",
+]
+
 # CSRF Trusted Origins
 csrf_origins_env = os.getenv("CSRF_TRUSTED_ORIGINS", "")
 if csrf_origins_env:
     CSRF_TRUSTED_ORIGINS = [orig.strip() for orig in csrf_origins_env.split(",") if orig.strip()]
 else:
     CSRF_TRUSTED_ORIGINS = [
+        "https://jobfit-frontend.onrender.com",
+        "https://*.onrender.com",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:5174",
