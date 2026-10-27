@@ -7,6 +7,7 @@
 <br /><br />
 
 [![Repository](https://img.shields.io/badge/GitHub-Amal070%2FJobFit--django-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Amal070/JobFit-django)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-jobfit--frontend.onrender.com-00C7B7?style=for-the-badge&logo=render&logoColor=white)](https://jobfit-frontend.onrender.com)
 [![Django](https://img.shields.io/badge/Backend-Django_5.1_+_DRF-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com)
 [![React](https://img.shields.io/badge/Frontend-React_19_+_React_Router_7-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
@@ -17,7 +18,11 @@
 
 **An enterprise-grade, privacy-first AI resume analysis and ATS scoring platform that transforms resumes into interview-winning profiles with deep rubric scoring, keyword intelligence, and actionable recommendations.**
 
-[⚡ **Key Features**](#-key-features) • [🏗️ **Architecture**](#-architecture) • [📊 **Scoring Engine**](#-ats-scoring--evaluation-engine) • [📡 **API Reference**](#-api-reference) • [🛠️ **Getting Started**](#-getting-started) • [⚙️ **Configuration**](#-configuration)
+<p align="center">
+  <a href="https://jobfit-frontend.onrender.com"><strong>🚀 Explore the Live Application: https://jobfit-frontend.onrender.com »</strong></a>
+</p>
+
+[🌐 **Live Demo**](https://jobfit-frontend.onrender.com) • [⚡ **Key Features**](#-key-features) • [🏗️ **Architecture**](#-architecture) • [📊 **Scoring Engine**](#-ats-scoring--evaluation-engine) • [📡 **API Reference**](#-api-reference) • [🛠️ **Getting Started**](#-getting-started) • [⚙️ **Configuration**](#-configuration) • [🚀 **Deployment**](#-render-deployment-guide)
 
 </div>
 
@@ -498,6 +503,8 @@ JobFit-AI/
 
 JobFit is fully pre-configured for seamless production deployment on [Render](https://render.com).
 
+> 🌐 **Live Deployed Application**: [https://jobfit-frontend.onrender.com](https://jobfit-frontend.onrender.com)
+
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        Render Production Architecture                  │
@@ -623,7 +630,7 @@ If you prefer to configure each service manually in the Render dashboard:
    }
    ```
 2. **Frontend Connectivity**:
-   Open `https://your-frontend.onrender.com`. Create an account, upload a test PDF resume, and verify that ATS scoring completes within 2–4 seconds.
+   Open [https://jobfit-frontend.onrender.com](https://jobfit-frontend.onrender.com). Create an account, upload a test PDF resume, and verify that ATS scoring completes within 2–4 seconds.
 
 ---
 
