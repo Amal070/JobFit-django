@@ -18,10 +18,6 @@
 
 **An enterprise-grade, privacy-first AI resume analysis and ATS scoring platform that transforms resumes into interview-winning profiles with deep rubric scoring, keyword intelligence, and actionable recommendations.**
 
-<p align="center">
-  <a href="https://jobfit-frontend.onrender.com"><strong>🚀 Explore the Live Application: https://jobfit-frontend.onrender.com »</strong></a>
-</p>
-
 [🌐 **Live Demo**](https://jobfit-frontend.onrender.com) • [⚡ **Key Features**](#-key-features) • [🏗️ **Architecture**](#-architecture) • [📊 **Scoring Engine**](#-ats-scoring--evaluation-engine) • [📡 **API Reference**](#-api-reference) • [🛠️ **Getting Started**](#-getting-started) • [⚙️ **Configuration**](#-configuration) • [🚀 **Deployment**](#-render-deployment-guide)
 
 </div>
